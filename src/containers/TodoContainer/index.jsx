@@ -9,60 +9,97 @@ import "./index.css";
 import TodoFooter from "../../components/TodoFooter";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { setInputVal, setTasksData, deleteTask, deleteTaskAll } from "./actions";
+import { setInputVal, setTasksData} from "./actions";
+import { createStructuredSelector } from "reselect";
+import { makeSelectTasksData, makeSelectInputVal } from "./selectors"; 
+import  {todoService} from "../../services/firebaseService";
+import { useEffect } from "react";
+// import { useState } from 'react';
+const tododState = createStructuredSelector({
+  tasksData: makeSelectTasksData(),
+  inputVal: makeSelectInputVal(),
+}); 
+
+
 const TodoContainer = () => {
   const dispatch = useDispatch();
-  const todoData = useSelector((store) => store.todoState);
+  const { getAll, create, remove } = todoService("/todo");
+  const onDataChange = (items) => {
+    let todo = [];
+
+    items.docs.forEach((item) => {
+      let id = item.id;
+      let data = item.data();
+      todo.push({
+        id: id,
+        task: data.task,
+      });
+    });
+    dispatch(setTasksData(todo))
+  };
+  useEffect(() => {
+    getAll().onSnapshot(onDataChange);
+  }, []);
+  // const todoData = useSelector((store) => store.todoState);
+  const {tasksData,inputVal}= useSelector(tododState);
   const handleChange = (val) => {
-    console.log(todoData.inputVal)
     dispatch(setInputVal(val));
   };
-  const handleClick = (from, index) => {
+  
+  const handleClick = (from,index) => {
+   
     switch (from) {
 
       case "add":
-        if (!todoData.inputVal) return;
-        dispatch(setTasksData(todoData.inputVal));
-        console.log("add")
+        if (!inputVal) return;
+        // dispatch(setTasksData(inputVal));
+        const data ={task : inputVal}
+        create(data);
         break;
 
       case "clear_task":
-        dispatch(deleteTask(index));
+        // dispatch(deleteTask(index));
+        remove(index)
         break;
 
       case "clear_all":
-        dispatch(deleteTaskAll())
+        // dispatch(deleteTaskAll())
+        tasksData &&
+              tasksData.forEach((item) => {
+               remove(item.id);
+              });
         break;
       default:
         break;
     }
+    // setClicked(!clicked)
   };
+  
   return (
     <section id="container">
       <h1>TODO APP</h1>
       <div id="test">
-        <CustomInput onChange={(e)=>handleChange(e.target.value)}  value={todoData.inputVal}/>
+        <CustomInput onChange={(e)=>handleChange(e.target.value)}  value={inputVal}/>
         <div className="button">
           <CustomButton color='#8f4be8' display="inline-block" onClick={() => handleClick("add")} content={<BsPlusLg />} />
         </div>
       </div>
-      {todoData.tasksData.map((item, index) => (
+      {tasksData && tasksData.length > 0 && tasksData.map((item, index) => (
         <div className="delete" key={index}>
-          <Task content={item} />
+          <Task content={item.task} />
           <div className="button">
-            <CustomButton color='red' onClick={() => handleClick("clear_task", index)} content={<BsTrashFill />} />
+            <CustomButton color='red' onClick={() => handleClick("clear_task", item.id)} content={<BsTrashFill />} />
           </div>
         </div>
       ))}
       <div id="footer">
-        <TodoFooter numberOfTasks={todoData.tasksData.length} />
-        {todoData.tasksData.length > 0 &&
+        <TodoFooter numberOfTasks={tasksData&& tasksData.length ? tasksData.length :0} />
+        {tasksData.length > 0 &&
           <div className="button">
             <CustomButton color='red' display="inline-block" onClick={() => handleClick("clear_all")} content='clear all' />
           </div>
         }
       </div>
-
     </section>
   );
 };

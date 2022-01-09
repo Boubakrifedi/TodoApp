@@ -8,7 +8,8 @@ const todoReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SET_TASKS_DATA:
       return {
-        tasksData: [...state.tasksData, action.payload],
+        // tasksData: [...state.tasksData, action.payload],
+        tasksData: action.payload,
         inputVal: "",
       };
     case actionTypes.SET_INPUT_VAL:
@@ -16,18 +17,18 @@ const todoReducer = (state = initialState, action) => {
         ...state,
         inputVal: action.payload,
       };
-    case actionTypes.DELETE_TASK:
-      return {
-        ...state,
-        tasksData: state.tasksData.filter((item, itemIndex) => {
-          return itemIndex !== action.payload;
-        }),
-      };
-    case actionTypes.DELETE_TASK_ALL:
-      return {
-        ...state,
-        tasksData: [],
-      };
+    // case actionTypes.DELETE_TASK:
+    //   return {
+    //     ...state,
+    //     tasksData: state.tasksData.filter((item, itemIndex) => {
+    //       return itemIndex !== action.payload;
+    //     }),
+    //   };
+    // case actionTypes.DELETE_TASK_ALL:
+    //   return {
+    //     ...state,
+    //     tasksData: [],
+    //   };
     default:
       return state;
   }

@@ -14,17 +14,17 @@ const setInputVal = (payload) => {
   };
 };
 
-const deleteTask = (payload) => {
-  return {
-    type: actionTypes.DELETE_TASK,
-    payload,
-  };
-};
+// const deleteTask = (payload) => {
+//   return {
+//     type: actionTypes.DELETE_TASK,
+//     payload,
+//   };
+// };
 
-const deleteTaskAll = () => {
-  return {
-    type: actionTypes.DELETE_TASK_ALL,
-  };
-};
+// const deleteTaskAll = () => {
+//   return {
+//     type: actionTypes.DELETE_TASK_ALL,
+//   };
+// };
 
-export { setTasksData, setInputVal, deleteTask, deleteTaskAll };
+export { setTasksData, setInputVal};
