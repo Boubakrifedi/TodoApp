@@ -39,7 +39,7 @@ const TodoContainer = () => {
   };
   useEffect(() => {
     getAll().onSnapshot(onDataChange);
-  }, []);
+  });
   // const todoData = useSelector((store) => store.todoState);
   const {tasksData,inputVal}= useSelector(tododState);
   const handleChange = (val) => {
@@ -77,7 +77,7 @@ const TodoContainer = () => {
   
   return (
     <section id="container">
-      <h1>TODO APP</h1>
+      <h1>To do-list system</h1>
       <div id="test">
         <CustomInput onChange={(e)=>handleChange(e.target.value)}  value={inputVal}/>
         <div className="button">

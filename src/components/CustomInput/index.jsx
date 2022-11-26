@@ -5,7 +5,7 @@ const CustomInput = ({onChange,value}) => {
     <input
       placeholder="Add your new todo"
       onChange={onChange}
-      value={value} />
+      value={value}/>
   );
 };
 export default CustomInput;
