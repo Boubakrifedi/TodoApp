@@ -39,7 +39,7 @@ const TodoContainer = () => {
   };
   useEffect(() => {
     getAll().onSnapshot(onDataChange);
-  });
+  }, []);
   // const todoData = useSelector((store) => store.todoState);
   const {tasksData,inputVal}= useSelector(tododState);
   const handleChange = (val) => {
