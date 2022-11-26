@@ -37,8 +37,10 @@ const TodoContainer = () => {
     });
     dispatch(setTasksData(todo))
   };
+  
   useEffect(() => {
     getAll().onSnapshot(onDataChange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // const todoData = useSelector((store) => store.todoState);
   const {tasksData,inputVal}= useSelector(tododState);
